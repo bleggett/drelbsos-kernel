@@ -86,7 +86,8 @@ jobs:
             --env CCACHE_DIR=/workspace/ccache \
             --env CCACHE_MAXSIZE=5G \
             --env CCACHE_COMPRESS=1 \
-            fedora_builder -- cd kernel && fedpkg \
+            -w /workspace/kernel
+            fedora_builder -- fedpkg \
             --name kernel --namespace rpms --release "f${{ matrix.fedora_version }}" \
             local --arch ${{ matrix.arch }} --with baseonly \
             --builddir build --buildrootdir buildroot
