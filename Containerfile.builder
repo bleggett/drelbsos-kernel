@@ -1,6 +1,6 @@
-ARG FEDORA_VERSION
+ARG FEDORA_MAJOR_VERSION
 
-FROM fedora:${FEDORA_VERSION}
+FROM fedora:${FEDORA_MAJOR_VERSION}
 
 RUN dnf install -y fedpkg fedora-packager rpmdevtools ncurses-devel pesign \
     asciidoc audit-libs-devel bc bindgen binutils-devel bison clang dwarves \
@@ -13,15 +13,15 @@ RUN dnf install -y fedpkg fedora-packager rpmdevtools ncurses-devel pesign \
     systemd-boot-unsigned systemd-ukify which xmlto xz-devel zlib-devel \
     python3-requests hmaccalc dracut tpm2-tools rustfmt && dnf clean all
 
-ARG UID=1000
-ARG GID=1000
+# ARG UID=1000
+# ARG GID=1000
 
-RUN groupadd -g $GID -o builder && \
-    useradd -m -u $UID -g $GID -o -s /bin/bash builder && \
-    echo "builder ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/builder && \
-    chmod 0440 /etc/sudoers.d/builder
-    
-USER builder
+# RUN groupadd -g $GID -o builder && \
+#     useradd -m -u $UID -g $GID -o -s /bin/bash builder && \
+#     echo "builder ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/builder && \
+#     chmod 0440 /etc/sudoers.d/builder
+
+# USER builder
 
 ENV PATH="/usr/lib64/ccache/:$PATH"
 
