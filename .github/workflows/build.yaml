@@ -116,9 +116,8 @@ jobs:
         with:
           name: kernel-f${{ matrix.fedora_version}}-${{ matrix.arch }}
           path: |
-            cd kernel
             .build-*.log
-            ${{ matrix.arch }}/kernel-*.rpm
+            kernel/${{ matrix.arch }}/kernel-*.rpm
           compression-level: 7
 
       - name: Upload Kernel debuginfo to action
@@ -126,9 +125,8 @@ jobs:
         with:
           name: kernel-f${{ matrix.fedora_version}}-${{ matrix.arch }}-debuginfo
           path: |
-            cd kernel
             .build-*.log
-            debuginfo/*.rpm
+            kernel/debuginfo/*.rpm
           compression-level: 7
       
       - name: Upload Kernel to release
