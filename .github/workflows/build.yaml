@@ -153,7 +153,7 @@ jobs:
           FEDORA_MAJOR_VERSION="${{ matrix.fedora_version }}"
           ARCH="${{ matrix.arch }}"
           DISABLE_ARG="${{ startsWith(github.ref, 'refs/tags/') && '--env CCACHE_DISABLE=true' || '' }}"
-          sudo podman push ${{ env.BUILDER_IMAGE }} docker://${{ env.IMAGE_REGISTRY }}/drelbsos-kernel:${{ matrix.fedora_version }} --creds ${{ env.REGISTRY_USER }}:${{ env.REGISTRY_PASSWORD }}
+          sudo podman push ${{ env.BUILDER_IMAGE }} docker://${{ env.IMAGE_REGISTRY }}/drelbsos-kernel:${{ matrix.fedora_version }} --creds "${{ env.REGISTRY_USER }}:${{ env.REGISTRY_PASSWORD }}"
 
       # - name: Push To GHCR
       #   uses: Wandalen/wretry.action@e68c23e6309f2871ca8ae4763e7629b9c258e1ea # v3.8.0
