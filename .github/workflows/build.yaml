@@ -5,8 +5,7 @@ on:
   release:
     types: [published]
 
-permissions:
-  contents: write
+permissions: write-all
 
 env:
   IMAGE_BASE_NAME: drelbsos-kernel
