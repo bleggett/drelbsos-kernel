@@ -104,7 +104,13 @@ jobs:
             --name kernel --namespace rpms --release "f${{ matrix.fedora_version }}" \
             local --arch ${{ matrix.arch }} --with baseonly \
             --builddir build --buildrootdir buildroot
-      
+
+      - name: Get Kernel Version
+        id: kernel-version
+        run: |
+          KERNEL_VER=$(ls -a | grep .build | head -n 1 | sed 's/.build-//' | sed 's/.log//')
+          echo "version=$KERNEL_VER\n" >> $GITHUB_OUTPUT
+
       - name: Print ccache stats
         if: ${{ !startsWith(github.ref, 'refs/tags/') }}
         run: |
@@ -127,7 +133,7 @@ jobs:
           COMMIT_TAGS+=("pr-${{ github.event.number }}-${VARIANT}")
           COMMIT_TAGS+=("${SHA_SHORT}-${VARIANT}")
 
-          BUILD_TAGS=("${VARIANT}" "${VARIANT}-${TIMESTAMP}")
+          BUILD_TAGS=("${VARIANT}" "${VARIANT}-${TIMESTAMP}" "${VARIANT}-${{ steps.kernel-version.version }}")
 
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
               echo "Generated the following commit tags: "
