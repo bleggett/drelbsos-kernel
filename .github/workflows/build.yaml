@@ -108,6 +108,7 @@ jobs:
       - name: Get Kernel Version
         id: kernel-version
         run: |
+          cd kernel
           KERNEL_VER=$(ls -a | grep .build | head -n 1 | sed 's/.build-//' | sed 's/.log//')
           echo "version=$KERNEL_VER\n" >> $GITHUB_OUTPUT
 
