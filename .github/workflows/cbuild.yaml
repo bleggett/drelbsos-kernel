@@ -45,7 +45,12 @@ jobs:
         run: |
           FEDORA_MAJOR_VERSION="${{ matrix.fedora_version }}"
           sudo podman build -f Containerfile.drelbsbase . --tag '${{ env.BUILDER_IMAGE }}' \
-            --build-arg FEDORA_MAJOR_VERSION=${{ matrix.fedora_version }}
+            --build-arg FEDORA_MAJOR_VERSION=${{ matrix.fedora_version }} \
+            --env CCACHE_DIR=/workspace/ccache \
+            --env CCACHE_MAXSIZE=5G \
+            --env CCACHE_COMPRESS=1 \
+            -v $(pwd)/ccache:/workspace/ccache
+
       # - name: Checkout Kernel
       #   run: |
       #     FEDORA_MAJOR_VERSION="${{ matrix.fedora_version }}"
