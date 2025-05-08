@@ -1,4 +1,4 @@
-name: Build DrelbsOS Kernel
+name: Build DrelbsOS Kernel (Containerized)
 
 on:
   workflow_dispatch:
