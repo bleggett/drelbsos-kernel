@@ -45,7 +45,6 @@ jobs:
         run: |
           FEDORA_MAJOR_VERSION="${{ matrix.fedora_version }}"
           sudo podman build -f Containerfile.drelbsbase . --tag '${{ env.BUILDER_IMAGE }}' \
-            --build-arg UID=$(id -u) --build-arg GID=$(id -g) \
             --build-arg FEDORA_MAJOR_VERSION=${{ matrix.fedora_version }}
       # - name: Checkout Kernel
       #   run: |
