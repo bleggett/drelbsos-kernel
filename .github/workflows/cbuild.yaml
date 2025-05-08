@@ -41,10 +41,19 @@ jobs:
           restore-keys: |
             ccache-${{ matrix.arch }}
 
+      - name: Determine latest Fedora kernel version
+        id: kernel-version
+        run: |
+          FEDORA_MAJOR_VERSION="${{ matrix.fedora_version }}"
+          ARCH="${{ matrix.arch }}"
+          KERNEL_VER=$(sudo podman run --rm fedora:${{ matrix.fedora_version }} dnf --releasever=${{ matrix.fedora_version }} info kernel-core | grep Source | awk '{sub(/\.src\.rpm$/,"",$3); print $3}')
+          echo "Found kernel version $KERNEL_VER"
+          echo "version=$KERNEL_VER\n" >> $GITHUB_OUTPUT
+
       - name: Create Build Environment
         run: |
           FEDORA_MAJOR_VERSION="${{ matrix.fedora_version }}"
-          sudo podman build -f Containerfile.drelbsbase . --tag '${{ env.BUILDER_IMAGE }}' \
+          sudo podman build -f Containerfile.drelbsbase . --tag '${{ env.BUILDER_IMAGE }}:${{ steps.kernel-version.outputs.version }}' \
             --build-arg FEDORA_MAJOR_VERSION=${{ matrix.fedora_version }} \
             --env CCACHE_DIR=/workspace/ccache \
             --env CCACHE_MAXSIZE=5G \
