@@ -177,7 +177,7 @@ jobs:
           REGISTRY_USER: ${{ github.actor }}
           REGISTRY_PASSWORD: ${{ github.token }}
         run: |
-          sudo podman push ${{ env.BUILDER_IMAGE }} docker://${{ env.IMAGE_REGISTRY }}/drelbsos-kernel:${{ matrix.fedora_version }} --creds "${{ env.REGISTRY_USER }}:${{ env.REGISTRY_PASSWORD }}"
+          sudo podman push ${{ env.BUILDER_IMAGE }}:${{ steps.kernel-version.outputs.version }} docker://${{ env.IMAGE_REGISTRY }}/drelbsos-kernel:${{ matrix.fedora_version }} --creds "${{ env.REGISTRY_USER }}:${{ env.REGISTRY_PASSWORD }}"
 
       # - name: Separate debuginfo into different folder
       #   run: |
