@@ -111,7 +111,6 @@ jobs:
         id: kernel-version
         run: |
           cd kernel
-          ls -lah
           KERNEL_VER=$(ls -a | grep .build | head -n 1 | sed 's/.build-//' | sed 's/.log//')
           echo $KERNEL_VER
           echo "version=$KERNEL_VER\n" >> $GITHUB_OUTPUT
@@ -138,7 +137,7 @@ jobs:
           COMMIT_TAGS+=("pr-${{ github.event.number }}-${VARIANT}")
           COMMIT_TAGS+=("${SHA_SHORT}-${VARIANT}")
 
-          BUILD_TAGS=("${VARIANT}" "${VARIANT}-${TIMESTAMP}" "${VARIANT}-${{ steps.kernel-version.version }}")
+          BUILD_TAGS=("${VARIANT}" "${VARIANT}-${TIMESTAMP}" "${VARIANT}-${{ steps.kernel-version.outputs.version }}")
 
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
               echo "Generated the following commit tags: "
