@@ -48,7 +48,7 @@ jobs:
           ARCH="${{ matrix.arch }}"
           KERNEL_VER=$(sudo podman run --rm fedora:${{ matrix.fedora_version }} dnf --releasever=${{ matrix.fedora_version }} info kernel-core | grep Source | awk '{sub(/\.src\.rpm$/,"",$3); print $3}')
           echo "Found kernel version $KERNEL_VER"
-          echo "version=$KERNEL_VER\n" >> $GITHUB_OUTPUT
+          echo "version=$KERNEL_VER" >> $GITHUB_OUTPUT
 
       - name: Create Build Environment
         run: |
