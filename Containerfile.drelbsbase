@@ -37,3 +37,43 @@ RUN mkdir -p debuginfo && mv x86_64/kernel-debuginfo-*.rpm debuginfo/
 RUN mkdir -p /tmp/rpms
 RUN mv x86_64/kernel-*.rpm /tmp/rpms
 RUN ls -lah /tmp/rpms
+
+
+FROM kernel-builder as module-builder
+
+WORKDIR /workspace
+
+COPY build_files/modscripts /tmp/
+COPY build_files/shared /tmp/
+# COPY certs /tmp/certs
+
+# files for akmods
+ADD https://copr.fedorainfracloud.org/coprs/ublue-os/akmods/repo/fedora-${FEDORA_MAJOR_VERSION}/ublue-os-akmods-fedora-${FEDORA_MAJOR_VERSION}.repo \
+    /tmp/ublue-os-akmods-addons/rpmbuild/SOURCES/_copr_ublue-os-akmods.repo
+ADD https://negativo17.org/repos/fedora-multimedia.repo \
+    /tmp/ublue-os-akmods-addons/rpmbuild/SOURCES/negativo17-fedora-multimedia.repo
+
+RUN --mount=type=bind,src=/tmp/rpms,dst=/tmp/kernel-cache,ro \
+    --mount=type=cache,dst=/var/cache/dnf \
+    # ls -sh /tmp/kernel_cache; \
+    # if grep -qv "surface" <<< "${KERNEL_FLAVOR}"; then \
+    #     export KERNEL_NAME="kernel" \
+    # ; else \
+    #     export KERNEL_NAME="kernel-surface" \
+    # ; fi && \
+    /tmp/build-prep.sh && \
+    /tmp/build-kmod-gcadapter_oc.sh && \
+    /tmp/build-kmod-ryzen-smu.sh && \
+    /tmp/build-kmod-vhba.sh && \
+    /tmp/build-kmod-xone.sh && \
+    /tmp/build-kmod-nvidia.sh && \
+    /tmp/build-kmod-openrazer.sh && \
+    /tmp/build-kmod-v4l2loopback.sh && \
+    # /tmp/dual-sign.sh && \
+    /tmp/build-post.sh
+
+
+FROM scratch
+
+COPY --from=kernel-builder /tmp-rpms /kernel-rpms
+COPY --from=module-builder /var/cache/rpms /kmod-rpms
