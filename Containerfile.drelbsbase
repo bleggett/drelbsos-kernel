@@ -19,6 +19,8 @@ ENV PATH="/usr/lib64/ccache/:$PATH"
 
 FROM fedora-builder as kernel-builder
 
+ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-42}"
+
 WORKDIR /workspace
 
 COPY drelbsos-kconfig-overrides .
@@ -40,6 +42,8 @@ RUN ls -lah /tmp/rpms
 
 
 FROM kernel-builder as module-builder
+
+ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-42}"
 
 WORKDIR /workspace
 
