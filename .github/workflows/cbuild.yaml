@@ -147,47 +147,7 @@ jobs:
           REGISTRY_PASSWORD: ${{ github.token }}
         run: |
           sudo podman push ${{ env.BUILDER_IMAGE }}:${{ steps.kernel-version.outputs.version }} docker://${{ env.IMAGE_REGISTRY }}/drelbsos-kernel:${{ matrix.fedora_version }} --creds "${{ env.REGISTRY_USER }}:${{ env.REGISTRY_PASSWORD }}"
-
-      # - name: Separate debuginfo into different folder
-      #   run: |
-      #     cd kernel
-      #     mkdir -p debuginfo
-      #     mv ${{ matrix.arch }}/kernel-debuginfo-*.rpm debuginfo/
-
-      # - name: Upload Kernel to action
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: kernel-f${{ matrix.fedora_version}}-${{ matrix.arch }}
-      #     path: |
-      #       .build-*.log
-      #       kernel/${{ matrix.arch }}/kernel-*.rpm
-      #     compression-level: 7
-
-      # - name: Upload Kernel debuginfo to action
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: kernel-f${{ matrix.fedora_version}}-${{ matrix.arch }}-debuginfo
-      #     path: |
-      #       .build-*.log
-      #       kernel/debuginfo/*.rpm
-      #     compression-level: 7
-
-      # - name: Upload Kernel to release
-      #   if: github.event_name == 'release'
-      #   uses: Wandalen/wretry.action@v3.8.0
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     attempt_limit: 3
-      #     attempt_delay: 15000
-      #     action: softprops/action-gh-release@v2
-      #     with: |
-      #       files: |
-      #         kernel/${{ matrix.arch }}/kernel-*.rpm
-      #         kernel/x86_64/linux-*.pkg.tar.zst
-      #         kernel/x86_64/linux-*.pkg.tar.zst.sig
-      #       fail_on_unmatched_files: false
-      #       make_latest: false
+          sudo podman push ${{ env.BUILDER_IMAGE }}:${{ steps.kernel-version.outputs.version }} docker://${{ env.IMAGE_REGISTRY }}/drelbsos-kernel:${{ steps.kernel-version.outputs.version }} --creds "${{ env.REGISTRY_USER }}:${{ env.REGISTRY_PASSWORD }}"
 
       # We always want to save the newest ccache
       - name: Backup ccache
