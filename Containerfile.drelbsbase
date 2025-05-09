@@ -52,6 +52,8 @@ RUN fedpkg --name kernel --namespace rpms --release "f${FEDORA_MAJOR_VERSION}" \
     local --arch x86_64 --with baseonly \
     --builddir build --buildrootdir buildroot
 RUN mkdir -p debuginfo && mv x86_64/kernel-debuginfo-*.rpm debuginfo/
+RUN mkdir -p /tmp/rpms
+RUN mv x86_64/kernel-*.rpm /tmp/rpms
 RUN ls -lah x86_64/
 
 # # FROM scratch AS ctx
