@@ -13,7 +13,7 @@ sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-cisco-openh264.repo
 mkdir -p /var/lib/alternatives
 
 # install kernel_cache provided kernel
-echo "Installing ${KERNEL_FLAVOR} kernel-cache RPMs..."
+echo "Installing kernel-cache RPMs..."
 # fedora image has no kernel so this needs nothing fancy, just install
 dnf install -y /tmp/kernel_cache/*.rpm
 KERNEL_VERSION=$(rpm -q "${KERNEL_NAME}" | cut -d '-' -f2-)
@@ -60,33 +60,19 @@ fi
 install -Dm644 /tmp/certs/public_key.der   /etc/pki/akmods/certs/public_key.der
 install -Dm644 /tmp/certs/private_key.priv /etc/pki/akmods/private/private_key.priv
 
-if [[ "${DUAL_SIGN}" == "true" ]]; then
-    dnf install -y rpmrebuild
-    if [[ ! -s "/tmp/certs/private_key_2.priv" ]]; then
-        echo "WARNING: Using test signing key. Run './generate-akmods-key' for production builds."
-        cp /tmp/certs/private_key_2.priv{.test,}
-        cp /tmp/certs/public_key_2.der{.test,}
-    fi
-    openssl x509 -in /tmp/certs/public_key_2.der -out /tmp/certs/public_key_2.crt
-    openssl x509 -in /tmp/certs/public_key.der -out /tmp/certs/public_key.crt
-    cat /tmp/certs/private_key.priv <(echo) /tmp/certs/public_key.crt >> /tmp/certs/signing_key_1.pem
-    cat /tmp/certs/private_key_2.priv <(echo) /tmp/certs/public_key_2.crt >> /tmp/certs/signing_key_2.pem
-    cat /tmp/certs/public_key.crt <(echo) /tmp/certs/public_key_2.crt >> /tmp/certs/public_key_chain.pem
-fi
-
-# This is for ZFS more than CoreOS
-if [[ "${KERNEL_FLAVOR}" =~ "coreos" ]]; then
-    install -Dm644 /tmp/certs/public_key.der /lib/modules/"${KERNEL_VERSION}"/build/certs/signing_key.x509
-    install -Dm644 /tmp/certs/private_key.priv /lib/modules/"${KERNEL_VERSION}"/build/certs/signing_key.pem
-    dnf install -y \
-        autoconf \
-        automake \
-        dkms \
-        git \
-        jq \
-        libtool \
-        ncompress
-fi
+# if [[ "${DUAL_SIGN}" == "true" ]]; then
+#     dnf install -y rpmrebuild
+#     if [[ ! -s "/tmp/certs/private_key_2.priv" ]]; then
+#         echo "WARNING: Using test signing key. Run './generate-akmods-key' for production builds."
+#         cp /tmp/certs/private_key_2.priv{.test,}
+#         cp /tmp/certs/public_key_2.der{.test,}
+#     fi
+#     openssl x509 -in /tmp/certs/public_key_2.der -out /tmp/certs/public_key_2.crt
+#     openssl x509 -in /tmp/certs/public_key.der -out /tmp/certs/public_key.crt
+#     cat /tmp/certs/private_key.priv <(echo) /tmp/certs/public_key.crt >> /tmp/certs/signing_key_1.pem
+#     cat /tmp/certs/private_key_2.priv <(echo) /tmp/certs/public_key_2.crt >> /tmp/certs/signing_key_2.pem
+#     cat /tmp/certs/public_key.crt <(echo) /tmp/certs/public_key_2.crt >> /tmp/certs/public_key_chain.pem
+# fi
 
 # protect against incorrect permissions in tmp dirs which can break akmods builds
 chmod 1777 /tmp /var/tmp
