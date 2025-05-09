@@ -134,13 +134,6 @@ jobs:
           sudo apt install -y ccache
           ccache -s
 
-      - name: Generate tags
-        id: generate-tags
-        shell: bash
-        run: |
-          sudo podman tag ${{ env.BUILDER_IMAGE }}:${{ steps.kernel-version.outputs.version }} ${{ env.IMAGE_REGISTRY }}/drelbsos-kernel:${{ matrix.fedora_version }}
-          sudo podman tag ${{ env.BUILDER_IMAGE }}:${{ steps.kernel-version.outputs.version }} ${{ env.IMAGE_REGISTRY }}/drelbsos-kernel:${{ steps.kernel-version.outputs.version }}
-
       - name: Push To GHCR
         env:
           REGISTRY_USER: ${{ github.actor }}
