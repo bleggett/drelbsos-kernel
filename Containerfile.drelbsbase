@@ -79,5 +79,5 @@ RUN --mount=type=bind,src=/tmp/rpms,dst=/tmp/kernel_cache,ro \
 
 FROM scratch
 
-COPY --from=kernel-builder /tmp-rpms /kernel-rpms
+COPY --from=kernel-builder /tmp/rpms /kernel-rpms
 COPY --from=module-builder /var/cache/rpms /kmod-rpms
