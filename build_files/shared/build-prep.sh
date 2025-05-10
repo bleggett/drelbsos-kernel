@@ -17,6 +17,8 @@ echo "Installing kernel-cache RPMs..."
 # fedora image has no kernel so this needs nothing fancy, just install
 dnf install -y /tmp/kernel_cache/*.rpm
 
+RPMFUSION_MIRROR=""
+
 # enable more repos
 RPMFUSION_MIRROR_RPMS="https://mirrors.rpmfusion.org"
 if [ -n "${RPMFUSION_MIRROR}" ]; then
