@@ -52,14 +52,14 @@ dnf install -y \
 
 gem install fpm
 
-if [[ ! -s "/tmp/certs/private_key.priv" ]]; then
-    echo "WARNING: Using test signing key. Run './generate-akmods-key' for production builds."
-    cp /tmp/certs/private_key.priv{.test,}
-    cp /tmp/certs/public_key.der{.test,}
-fi
+# if [[ ! -s "/tmp/certs/private_key.priv" ]]; then
+#     echo "WARNING: Using test signing key. Run './generate-akmods-key' for production builds."
+#     cp /tmp/certs/private_key.priv{.test,}
+#     cp /tmp/certs/public_key.der{.test,}
+# fi
 
-install -Dm644 /tmp/certs/public_key.der   /etc/pki/akmods/certs/public_key.der
-install -Dm644 /tmp/certs/private_key.priv /etc/pki/akmods/private/private_key.priv
+# install -Dm644 /tmp/certs/public_key.der   /etc/pki/akmods/certs/public_key.der
+# install -Dm644 /tmp/certs/private_key.priv /etc/pki/akmods/private/private_key.priv
 
 # if [[ "${DUAL_SIGN}" == "true" ]]; then
 #     dnf install -y rpmrebuild
