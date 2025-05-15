@@ -50,10 +50,10 @@ jobs:
           echo "Found kernel version $KERNEL_VER"
           echo "version=$KERNEL_VER" >> $GITHUB_OUTPUT
 
-      - name: Create Build Environment
+      - name: Build kernel and modules
         run: |
           FEDORA_MAJOR_VERSION="${{ matrix.fedora_version }}"
-          sudo podman build -f Containerfile.drelbsbase . --tag '${{ env.BUILDER_IMAGE }}:${{ steps.kernel-version.outputs.version }}' \
+          sudo podman build -f Containerfile . --tag '${{ env.BUILDER_IMAGE }}:${{ steps.kernel-version.outputs.version }}' \
             --build-arg FEDORA_MAJOR_VERSION=${{ matrix.fedora_version }} \
             --env CCACHE_DIR=/workspace/ccache \
             --env CCACHE_MAXSIZE=5G \

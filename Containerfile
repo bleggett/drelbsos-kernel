@@ -40,7 +40,6 @@ RUN mkdir -p /tmp/rpms
 RUN mv x86_64/kernel-*.rpm /tmp/rpms
 RUN ls -lah /tmp/rpms
 
-
 FROM kernel-builder as module-builder
 
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-42}"
@@ -61,11 +60,6 @@ COPY --from=kernel-builder /tmp/rpms /tmp/kernel_cache
 
 RUN --mount=type=cache,dst=/var/cache/dnf \
     ls -sh /tmp/kernel_cache; \
-    # if grep -qv "surface" <<< "${KERNEL_FLAVOR}"; then \
-    #     export KERNEL_NAME="kernel" \
-    # ; else \
-    #     export KERNEL_NAME="kernel-surface" \
-    # ; fi && \
     /tmp/build-prep.sh && \
     /tmp/build-kmod-gcadapter_oc.sh && \
     /tmp/build-kmod-ryzen-smu.sh && \
