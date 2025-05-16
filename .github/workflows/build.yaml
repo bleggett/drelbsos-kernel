@@ -1,9 +1,9 @@
 name: Build DrelbsOS Kernel
 
 on:
+  schedule:
+    - cron: '05 10 * * 2'  # 10:05am UTC tue
   workflow_dispatch:
-  release:
-    types: [published]
 
 permissions:
   contents: write
