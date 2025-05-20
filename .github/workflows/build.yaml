@@ -52,6 +52,7 @@ jobs:
 
       - name: Build kernel and modules
         run: |
+          mkdir -p $(pwd)/ccache
           FEDORA_MAJOR_VERSION="${{ matrix.fedora_version }}"
           sudo podman build -f Containerfile . --tag '${{ env.BUILDER_IMAGE }}:${{ steps.kernel-version.outputs.version }}' \
             --build-arg FEDORA_MAJOR_VERSION=${{ matrix.fedora_version }} \
