@@ -3,7 +3,7 @@
 set -oeux pipefail
 
 RELEASE="$(rpm -E '%fedora.%_arch')"
-KERNEL_MODULE_TYPE="${1:-kernel}"
+KERNEL_MODULE_TYPE="${1:-kernel-open}"
 
 cd /tmp
 
