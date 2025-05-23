@@ -44,7 +44,7 @@ jobs:
       - name: Determine latest Fedora kernel version
         id: kernel-version
         run: |
-          git clone https://src.fedoraproject.org/rpms/kernel.git -b "${{ matrix.fedora_version }}" --depth 1 kver
+          git clone https://src.fedoraproject.org/rpms/kernel.git -b f"${{ matrix.fedora_version }}" --depth 1 kver
           cd kver
           # Get the kernel version from the spec file
           SPEC_RPM_VERSION=$(grep "^%define specrpmversion" kernel.spec | awk '{print $3}')
