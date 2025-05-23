@@ -44,10 +44,16 @@ jobs:
       - name: Determine latest Fedora kernel version
         id: kernel-version
         run: |
-          FEDORA_MAJOR_VERSION="${{ matrix.fedora_version }}"
-          ARCH="${{ matrix.arch }}"
-          KERNEL_VER=$(sudo podman run --rm fedora:${{ matrix.fedora_version }} dnf --releasever=${{ matrix.fedora_version }} info kernel-core | grep Source | awk '{sub(/\.src\.rpm$/,"",$3); print $3}')
+          git clone https://src.fedoraproject.org/rpms/kernel.git -b "${{ matrix.fedora_version }}" --depth 1 kver
+          cd kver
+          # Get the kernel version from the spec file
+          SPEC_RPM_VERSION=$(grep "^%define specrpmversion" kernel.spec | awk '{print $3}')
+          PKG_RELEASE=$(grep "^%define pkgrelease" kernel.spec | awk '{print $3}')
+          # Output the version in the standard format
+          KERNEL_VER="${SPEC_RPM_VERSION}-${PKG_RELEASE}.fc${{ matrix.fedora_version }}"
           echo "Found kernel version $KERNEL_VER"
+          cd ../
+          rm -rf kver
           echo "version=$KERNEL_VER" >> $GITHUB_OUTPUT
 
       - name: Build kernel and modules
