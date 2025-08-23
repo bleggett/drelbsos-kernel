@@ -15,8 +15,13 @@ sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/rpmfusion-*.repo
 curl -L https://negativo17.org/repos/fedora-nvidia.repo \
     -o /etc/yum.repos.d/negativo17-fedora-nvidia.repo
 
-dnf install -y \
-    akmod-nvidia*.fc${RELEASE}
+if [ -n "${NVIDIA_DRIVER_VERSION:-}" ]; then
+    dnf install -y \
+        akmod-nvidia-${NVIDIA_DRIVER_VERSION}*.fc${RELEASE}
+else
+    dnf install -y \
+        akmod-nvidia*.fc${RELEASE}
+fi
 
 # Either successfully build and install the kernel modules, or fail early with debug output
 rpm -qa |grep nvidia

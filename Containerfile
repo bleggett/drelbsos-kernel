@@ -1,8 +1,10 @@
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-42}"
+ARG NVIDIA_DRIVER_VERSION
 
 FROM fedora:${FEDORA_MAJOR_VERSION} as fedora-builder
 
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-42}"
+ARG NVIDIA_DRIVER_VERSION
 
 RUN dnf install -y fedpkg fedora-packager rpmdevtools ncurses-devel pesign \
     asciidoc audit-libs-devel bc bindgen binutils-devel bison clang dwarves \
@@ -20,6 +22,7 @@ ENV PATH="/usr/lib64/ccache/:$PATH"
 FROM fedora-builder as kernel-builder
 
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-42}"
+ARG NVIDIA_DRIVER_VERSION
 
 WORKDIR /workspace
 
@@ -43,6 +46,7 @@ RUN ls -lah /tmp/rpms
 FROM kernel-builder as module-builder
 
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-42}"
+ARG NVIDIA_DRIVER_VERSION
 
 WORKDIR /workspace
 
@@ -57,6 +61,8 @@ ADD https://negativo17.org/repos/fedora-multimedia.repo \
     /tmp/ublue-os-akmods-addons/rpmbuild/SOURCES/negativo17-fedora-multimedia.repo
 
 COPY --from=kernel-builder /tmp/rpms /tmp/kernel_cache
+
+ENV NVIDIA_DRIVER_VERSION=${NVIDIA_DRIVER_VERSION}
 
 RUN --mount=type=cache,dst=/var/cache/dnf \
     ls -sh /tmp/kernel_cache; \

@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: '05 10 * * 2'  # 10:05am UTC tue
   workflow_dispatch:
+    inputs:
+      nvidia_driver_version:
+        description: 'Specific NVIDIA module version to build and package (e.g., 575.65.3). If unset, latest used.'
+        required: false
+        type: string
 
 permissions:
   contents: write
@@ -62,6 +67,7 @@ jobs:
           FEDORA_MAJOR_VERSION="${{ matrix.fedora_version }}"
           sudo podman build -f Containerfile . --tag '${{ env.BUILDER_IMAGE }}:${{ steps.kernel-version.outputs.version }}' \
             --build-arg FEDORA_MAJOR_VERSION=${{ matrix.fedora_version }} \
+            --build-arg NVIDIA_DRIVER_VERSION=${{ inputs.nvidia_driver_version }} \
             --env CCACHE_DIR=/workspace/ccache \
             --env CCACHE_MAXSIZE=5G \
             --env CCACHE_COMPRESS=1 \
