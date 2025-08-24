@@ -2,7 +2,7 @@
 
 set -oeux pipefail
 
-RELEASE="$(rpm -E '%fedora.%_arch')"
+RELEASE_ARCH="$(rpm -E '%fedora.%_arch')"
 KERNEL_MODULE_TYPE="${1:-kernel-open}"
 
 cd /tmp
@@ -17,16 +17,16 @@ curl -L https://negativo17.org/repos/fedora-nvidia.repo \
 
 if [ -n "${NVIDIA_DRIVER_VERSION:-}" ]; then
     dnf install -y \
-        akmod-nvidia-${NVIDIA_DRIVER_VERSION}*.fc${RELEASE}
+        akmod-nvidia-${NVIDIA_DRIVER_VERSION}*.fc${RELEASE_ARCH}
 else
     dnf install -y \
-        akmod-nvidia*.fc${RELEASE}
+        akmod-nvidia*.fc${RELEASE_ARCH}
 fi
 
 # Either successfully build and install the kernel modules, or fail early with debug output
 rpm -qa |grep nvidia
-KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
-NVIDIA_AKMOD_VERSION="$(basename "$(rpm -q "akmod-nvidia" --queryformat '%{VERSION}-%{RELEASE}')" ".fc${RELEASE%%.*}")"
+KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE_ARCH}.%{ARCH}')"
+NVIDIA_AKMOD_VERSION="$(basename "$(rpm -q "akmod-nvidia" --queryformat '%{VERSION}-%{RELEASE_ARCH}')" ".fc${RELEASE_ARCH%%.*}")"
 
 sed -i "s/^MODULE_VARIANT=.*/MODULE_VARIANT=$KERNEL_MODULE_TYPE/" /etc/nvidia/kernel.conf
 
@@ -45,6 +45,6 @@ mkdir -p /var/cache/rpms/kmods/nvidia
 cat <<EOF > /var/cache/rpms/kmods/nvidia-vars
 KERNEL_VERSION=${KERNEL_VERSION}
 KERNEL_MODULE_TYPE=${KERNEL_MODULE_TYPE}
-RELEASE=${RELEASE}
+RELEASE_ARCH=${RELEASE_ARCH}
 NVIDIA_AKMOD_VERSION=${NVIDIA_AKMOD_VERSION}
 EOF
