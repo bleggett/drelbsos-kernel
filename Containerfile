@@ -74,8 +74,7 @@ RUN --mount=type=cache,dst=/var/cache/dnf \
     /tmp/build-kmod-gcadapter_oc.sh && \
     /tmp/build-kmod-ryzen-smu.sh && \
     /tmp/build-kmod-vhba.sh && \
-    # TODO disable this, build error
-    # /tmp/build-kmod-xone.sh && \
+    /tmp/build-kmod-xone.sh && \
     /tmp/build-kmod-nvidia.sh && \
     /tmp/build-kmod-openrazer.sh && \
     # /tmp/build-kmod-v4l2loopback.sh && \
