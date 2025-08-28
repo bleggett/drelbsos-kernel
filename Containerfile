@@ -1,10 +1,12 @@
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-42}"
 ARG NVIDIA_DRIVER_VERSION
+ARG FEDORA_KERNEL_SHA
 
 FROM fedora:${FEDORA_MAJOR_VERSION} as fedora-builder
 
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-42}"
 ARG NVIDIA_DRIVER_VERSION
+ARG FEDORA_KERNEL_SHA
 
 RUN dnf install -y fedpkg fedora-packager rpmdevtools ncurses-devel pesign \
     asciidoc audit-libs-devel bc bindgen binutils-devel bison clang dwarves \
@@ -30,6 +32,8 @@ COPY drelbsos-kconfig-overrides .
 
 RUN fedpkg co -a kernel -b f"${FEDORA_MAJOR_VERSION}"
 WORKDIR /workspace/kernel
+RUN [ -z "${FEDORA_KERNEL_SHA}" ] || git checkout "${FEDORA_KERNEL_SHA}"
+
 RUN sed -i 's/^# define buildid \.local$/%define buildid .drelbsos/' kernel.spec
 RUN cat ../drelbsos-kconfig-overrides >> kernel-local
 RUN find . -type f -name "kernel*.config" -not -name "kernel-x86_64*.config" -exec rm {} \;

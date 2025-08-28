@@ -5,6 +5,10 @@ on:
     - cron: '05 10 * * 2'  # 10:05am UTC tue
   workflow_dispatch:
     inputs:
+      fedora_kernel_sha:
+        description: 'Specific https://src.fedoraproject.org/rpms/kernel SHA from the upstream f{fedora_version} kernel tree branch to build with'
+        required: false
+        type: string
       nvidia_driver_version:
         description: 'Specific NVIDIA module version to build and package (e.g., 575.65.3). If unset, latest used.'
         required: false
@@ -51,6 +55,14 @@ jobs:
         run: |
           git clone https://src.fedoraproject.org/rpms/kernel.git -b f"${{ matrix.fedora_version }}" --depth 1 kver
           cd kver
+
+          # Checkout specific SHA if provided
+          if [[ -n "${{ inputs.fedora_kernel_sha }}" ]]; then
+            echo "Checking out specific kernel SHA: ${{ inputs.fedora_kernel_sha }}"
+            git fetch --unshallow # Need full history to checkout specific SHA
+            git checkout "${{ inputs.fedora_kernel_sha }}"
+          fi
+
           # Get the kernel version from the spec file
           SPEC_RPM_VERSION=$(grep "^%define specrpmversion" kernel.spec | awk '{print $3}')
           PKG_RELEASE=$(grep "^%define pkgrelease" kernel.spec | awk '{print $3}')
@@ -68,6 +80,7 @@ jobs:
           sudo podman build -f Containerfile . --tag '${{ env.BUILDER_IMAGE }}:${{ steps.kernel-version.outputs.version }}' \
             --build-arg FEDORA_MAJOR_VERSION=${{ matrix.fedora_version }} \
             --build-arg NVIDIA_DRIVER_VERSION=${{ inputs.nvidia_driver_version }} \
+            --build-arg FEDORA_KERNEL_SHA=${{ inputs.fedora_kernel_sha }} \
             --env CCACHE_DIR=/workspace/ccache \
             --env CCACHE_MAXSIZE=5G \
             --env CCACHE_COMPRESS=1 \
