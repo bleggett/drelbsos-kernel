@@ -37,13 +37,10 @@ dnf install -y \
     "${RPMFUSION_MIRROR_RPMS}"/nonfree/fedora/rpmfusion-nonfree-release-"${RELEASE}".noarch.rpm \
     fedora-repos-archive
 
-# after F42 launches, bump to 43
-if [[ "${FEDORA_MAJOR_VERSION}" -ge 42 ]]; then
-    # pre-release rpmfusion is in a different location
-    sed -i "s%free/fedora/releases%free/fedora/development%" /etc/yum.repos.d/rpmfusion-*.repo
-    # pre-release rpmfusion needs to enable testing
-    sed -i '0,/enabled=0/{s/enabled=0/enabled=1/}' /etc/yum.repos.d/rpmfusion-*-updates-testing.repo
-fi
+# pre-release rpmfusion is in a different location
+sed -i "s%free/fedora/releases%free/fedora/development%" /etc/yum.repos.d/rpmfusion-*.repo
+# # pre-release rpmfusion needs to enable testing
+# sed -i '0,/enabled=0/{s/enabled=0/enabled=1/}' /etc/yum.repos.d/rpmfusion-*-updates-testing.repo
 
 if [ -n "${RPMFUSION_MIRROR}" ]; then
     # force use of single rpmfusion mirror
@@ -52,12 +49,7 @@ if [ -n "${RPMFUSION_MIRROR}" ]; then
     sed -i "s%^#baseurl=http://download1.rpmfusion.org%baseurl=${RPMFUSION_MIRROR}%" /etc/yum.repos.d/rpmfusion-*.repo
 fi
 
-# after F42 launches, bump to 43
-if [[ "${RELEASE}" -ge 42 ]]; then
-    COPR_RELEASE="rawhide"
-else
-    COPR_RELEASE="${RELEASE}"
-fi
+COPR_RELEASE="${RELEASE}"
 
 curl -Lo /etc/yum.repos.d/_copr_ublue-os_staging.repo \
     "https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-${COPR_RELEASE}/ublue-os-staging-fedora-${COPR_RELEASE}.repo"
