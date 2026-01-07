@@ -17,7 +17,9 @@ RUN dnf install -y fedpkg fedora-packager rpmdevtools ncurses-devel pesign \
     numactl-devel openssl openssl-devel pciutils-devel perl perl-devel \
     perl-generators python3-devel python3-docutils rsync rust rust-src \
     systemd-boot-unsigned systemd-ukify which xmlto xz-devel zlib-devel \
-    python3-requests hmaccalc dracut tpm2-tools rustfmt clippy && dnf clean all
+    python3-requests hmaccalc dracut tpm2-tools rustfmt clippy dosfstools \
+    e2fsprogs xfsprogs \
+    && dnf clean all
 
 ENV PATH="/usr/lib64/ccache/:$PATH"
 
