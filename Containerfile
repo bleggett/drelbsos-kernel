@@ -22,6 +22,7 @@ RUN dnf install -y fedpkg fedora-packager rpmdevtools ncurses-devel pesign \
     && dnf clean all
 
 ENV PATH="/usr/lib64/ccache/:$PATH"
+ENV KCFLAGS="-march=znver2"
 
 FROM fedora-builder as kernel-builder
 

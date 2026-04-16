@@ -7,13 +7,7 @@ ARCH="$(rpm -E '%_arch')"
 KERNEL="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
 RELEASE="$(rpm -E '%fedora')"
 
-if [[ "${RELEASE}" -ge 43 ]]; then
-    COPR_RELEASE="rawhide"
-else
-    COPR_RELEASE="${RELEASE}"
-fi
-
-curl -LsSf -o /etc/yum.repos.d/_copr_rok-cdemu.repo "https://copr.fedorainfracloud.org/coprs/rok/cdemu/repo/fedora-${COPR_RELEASE}/rok-cdemu-fedora-${COPR_RELEASE}.repo"
+curl -LsSf -o /etc/yum.repos.d/_copr_rok-cdemu.repo "https://copr.fedorainfracloud.org/coprs/rok/cdemu/repo/fedora-${RELEASE}/rok-cdemu-fedora-${RELEASE}.repo"
 
 ### BUILD vhba (succeed or fail-fast with debug output)
 dnf install -y \
