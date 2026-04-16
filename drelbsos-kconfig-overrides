@@ -20,3 +20,6 @@ CONFIG_DRM_ACCEL_AMDXDNA=m
 # /proc-accessible kconfig
 CONFIG_IKCONFIG=y
 CONFIG_IKCONFIG_PROC=y
+
+# CPU microarchitecture tuning — target x86-64-v3 (Zen 2 fully supports this)
+CONFIG_X86_64_VERSION=3
