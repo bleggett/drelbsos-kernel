@@ -30,7 +30,7 @@ jobs:
       fail-fast: false
       matrix:
         arch: ["x86_64"]
-        fedora_version: [43]
+        fedora_version: [44]
     runs-on: ${{ 'ubuntu-24.04' }}
 
     steps:
