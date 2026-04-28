@@ -81,6 +81,7 @@ jobs:
             --build-arg FEDORA_MAJOR_VERSION=${{ matrix.fedora_version }} \
             --build-arg NVIDIA_DRIVER_VERSION=${{ inputs.nvidia_driver_version }} \
             --build-arg FEDORA_KERNEL_SHA=${{ inputs.fedora_kernel_sha }} \
+            --ulimit nofile=65536:65536 \
             --env CCACHE_DIR=/workspace/ccache \
             --env CCACHE_MAXSIZE=5G \
             --env CCACHE_COMPRESS=1 \
