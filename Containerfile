@@ -79,8 +79,6 @@ RUN --mount=type=cache,dst=/var/cache/dnf \
     /tmp/build-kmod-vhba.sh && \
     /tmp/build-kmod-xone.sh && \
     /tmp/build-kmod-nvidia.sh && \
-    /tmp/build-kmod-openrazer.sh && \
-    # /tmp/build-kmod-v4l2loopback.sh && \
     # /tmp/dual-sign.sh && \
     /tmp/build-post.sh
 
