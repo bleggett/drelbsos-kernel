@@ -44,6 +44,7 @@ RUN sed -i -E '/(aarch64|riscv64|s390|ppc64le).*\.config/d' kernel.spec
 
 RUN fedpkg --name kernel --namespace rpms --release "f${FEDORA_MAJOR_VERSION}" \
     local --arch x86_64 --with baseonly \
+    --without efiuki \
     --builddir build --buildrootdir buildroot
 RUN mkdir -p debuginfo && mv x86_64/kernel-debuginfo-*.rpm debuginfo/
 RUN mkdir -p /tmp/rpms
