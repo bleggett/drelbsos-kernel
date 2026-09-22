@@ -62,12 +62,6 @@ COPY build_files/modscripts /tmp/
 COPY build_files/shared /tmp/
 # COPY certs /tmp/certs
 
-# files for akmods
-ADD https://copr.fedorainfracloud.org/coprs/ublue-os/akmods/repo/fedora-${FEDORA_MAJOR_VERSION}/ublue-os-akmods-fedora-${FEDORA_MAJOR_VERSION}.repo \
-    /tmp/ublue-os-akmods-addons/rpmbuild/SOURCES/_copr_ublue-os-akmods.repo
-ADD https://negativo17.org/repos/fedora-multimedia.repo \
-    /tmp/ublue-os-akmods-addons/rpmbuild/SOURCES/negativo17-fedora-multimedia.repo
-
 COPY --from=kernel-builder /tmp/rpms /tmp/kernel_cache
 
 ENV NVIDIA_DRIVER_VERSION=${NVIDIA_DRIVER_VERSION}

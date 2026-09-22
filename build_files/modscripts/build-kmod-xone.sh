@@ -6,7 +6,7 @@ ARCH="$(rpm -E '%_arch')"
 KERNEL="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
 RELEASE="$(rpm -E '%fedora')"
 
-cp /tmp/ublue-os-akmods-addons/rpmbuild/SOURCES/_copr_ublue-os-akmods.repo /etc/yum.repos.d/
+curl -LsSf -o /etc/yum.repos.d/_copr_ublue-os-akmods.repo "https://copr.fedorainfracloud.org/coprs/ublue-os/akmods/repo/fedora-${RELEASE}/ublue-os-akmods-fedora-${RELEASE}.repo"
 
 ### BUILD xone (succeed or fail-fast with debug output)
 dnf install -y \
