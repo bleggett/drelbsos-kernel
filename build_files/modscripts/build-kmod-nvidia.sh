@@ -9,9 +9,6 @@ cd /tmp
 
 ### BUILD nvidia
 
-# disable rpmfusion and enable negativo17
-sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/rpmfusion-*.repo
-
 curl -L https://negativo17.org/repos/fedora-nvidia.repo \
     -o /etc/yum.repos.d/negativo17-fedora-nvidia.repo
 
