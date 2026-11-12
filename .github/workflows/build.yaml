@@ -35,7 +35,7 @@ jobs:
 
     steps:
       - name: Maximize build space
-        uses: ublue-os/remove-unwanted-software@v9
+        uses: AdityaGarg8/remove-unwanted-software@v5.1
 
       - name: Checkout repository
         uses: actions/checkout@v6
